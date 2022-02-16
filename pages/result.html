@@ -20,8 +20,7 @@
                 let noteContainer = document.getElementById('note');
                 let note = response.data.note;
                 if (note === null) {
-                    noteContainer.innerHTML =
-                        "Your haven't saved any note yet!";
+                    noteContainer.innerHTML = "You haven't saved any note yet!";
                     noteContainer.className = 'error';
                 } else {
                     noteContainer.innerText = note;
