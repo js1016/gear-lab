@@ -4,16 +4,28 @@
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Notes save result</title>
+        <title>Note save result</title>
+        <link href="style.css" rel="stylesheet" />
     </head>
     <body>
-        <h2>You have successfully saved the notes</h2>
-        <div>Your notes:</div>
-        <div id="notes"></div>
-        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <div id="container">
+            <h2>You have successfully saved the note</h2>
+            <div>Note content:</div>
+            <div id="note"></div>
+            <a href="/">Edit note</a>
+        </div>
+        <script src="axios.min.js"></script>
         <script>
-            axios.get('/getNotes').then((response) => {
-                console.log(response);
+            axios.get('/getNote').then((response) => {
+                let noteContainer = document.getElementById('note');
+                let note = response.data.note;
+                if (note === null) {
+                    noteContainer.innerHTML =
+                        "Your haven't saved any note yet!";
+                    noteContainer.className = 'error';
+                } else {
+                    noteContainer.innerText = note;
+                }
             });
         </script>
     </body>

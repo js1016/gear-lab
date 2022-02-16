@@ -4,22 +4,28 @@
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Save your notes</title>
+        <title>Save your note</title>
+        <link href="style.css" rel="stylesheet" />
     </head>
     <body>
-        <div>Enter your notes:</div>
-        <div><textarea></textarea></div>
-        <div><button>Save</button></div>
-        <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <div id="container">
+            <h3>Enter your note:</h3>
+            <div><textarea></textarea></div>
+            <div><button>Save</button></div>
+        </div>
+        <script src="js.cookie.min.js"></script>
+        <script src="axios.min.js"></script>
         <script>
             let saveNotes = () => {
                 axios
-                    .post('http://127.0.0.1:3000/save/', {
-                        notes: document.getElementsByTagName('textarea')[0]
-                            .value,
-                        user: Cookies.get('user')
-                    })
+                    .post(
+                        `http://127.0.0.1:3000/saveNote/?rnd=${new Date().getTime()}`,
+                        {
+                            note: document.getElementsByTagName('textarea')[0]
+                                .value,
+                            user: Cookies.get('user')
+                        }
+                    )
                     .then(() => {
                         console.log('Saved!');
                     });

@@ -5,16 +5,22 @@ const { v4: uuidv4 } = require('uuid');
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
+app.use(express.static('static'));
 const port = 3000;
 
 let notes = {};
 
 app.get('/', (req, res) => {
+    if (req.hostname !== 'localhost') {
+        res.redirect('http://localhost:3000');
+        return;
+    }
     if (!('user' in req.cookies) || !(req.cookies.user in notes)) {
         let id = uuidv4();
         while (id in notes) {
             id = uuidv4();
         }
+        console.log(`New user: ${id}`);
         res.cookie('user', id);
         notes[id] = null;
     }
@@ -22,40 +28,38 @@ app.get('/', (req, res) => {
 });
 
 app.get('/result', (req, res) => {
-    res.sendFile(path.join(__dirname, 'pages', 'result.html'));
+    if (!('user' in req.cookies) || !(req.cookies.user in notes)) {
+        res.redirect('/');
+    } else {
+        res.sendFile(path.join(__dirname, 'pages', 'result.html'));
+    }
 });
 
-app.get('/getNotes', (req, res) => {
+app.get('/getNote', (req, res) => {
     if ('user' in req.cookies && req.cookies.user in notes) {
         res.send({
-            notes: notes[req.cookies.user]
+            note: notes[req.cookies.user]
         });
     } else {
         res.sendStatus(400);
     }
 });
 
-app.options('/save', (req, res) => {
-    res.setHeader(
-        'Access-Control-Allow-Methods',
-        'GET, PUT, POST, DELETE, OPTIONS'
-    );
-    res.setHeader(
-        'Access-Control-Allow-Headers',
-        'Content-Type, Authorization, Content-Length, X-Requested-With'
-    );
+app.options('/saveNote', (req, res) => {
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     res.setHeader('Access-Control-Allow-Origin', '*');
     setTimeout(() => {
         res.sendStatus(200);
     }, 500);
 });
 
-app.post('/save', (req, res) => {
+app.post('/saveNote', (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
-    if ('notes' in req.body && 'user' in req.body && req.body.user in notes) {
-        notes[req.body.user] = req.body.notes;
+    if ('note' in req.body && 'user' in req.body && req.body.user in notes) {
+        notes[req.body.user] = req.body.note;
         console.log(
-            `Saved notes to: ${notes[req.body.user]} for user: ${req.body.user}`
+            `User: ${req.body.user} saved note: ${notes[req.body.user]}`
         );
         res.sendStatus(200);
     } else {
@@ -64,5 +68,7 @@ app.post('/save', (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log('App is running...');
+    console.log(
+        'App is running, you can access http://localhost:3000/ in browser'
+    );
 });

@@ -1,10 +1,10 @@
 Prerequisites:
 
-1. NodeJS is installed
+1. [NodeJS](https://nodejs.org/en/) is installed
+2. [git](https://git-scm.com/) is installed
 
 Run the application:
 
 1. Clone the repo
-2. Run `npm install` to install required packages
-3. Run `npm start` to start the application
-4. Access `http://localhost:3000/` in browser
+2. Open command prompt and run `start.bat`
+3. After seeing message `App is running, you can access http://localhost:3000/ in browser`, you can access `http://localhost:3000/` in browser.
