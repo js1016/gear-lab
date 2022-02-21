@@ -14,18 +14,20 @@
             <div id="note"></div>
             <a href="/">Edit note</a>
         </div>
-        <script src="axios.min.js"></script>
         <script>
-            axios.get('/getNote').then((response) => {
-                let noteContainer = document.getElementById('note');
-                let note = response.data.note;
-                if (note === null) {
-                    noteContainer.innerHTML = "You haven't saved any note yet!";
-                    noteContainer.className = 'error';
-                } else {
-                    noteContainer.innerText = note;
-                }
-            });
+            fetch('/getNote')
+                .then((response) => response.json())
+                .then((response) => {
+                    let noteContainer = document.getElementById('note');
+                    let note = response.note;
+                    if (note === null) {
+                        noteContainer.innerHTML =
+                            "You haven't saved any note yet!";
+                        noteContainer.className = 'error';
+                    } else {
+                        noteContainer.innerText = note;
+                    }
+                });
         </script>
     </body>
 </html>

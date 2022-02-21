@@ -14,23 +14,28 @@
             <div><button>Save</button></div>
         </div>
         <script src="js.cookie.min.js"></script>
-        <script src="axios.min.js"></script>
         <script>
             let saveNotes = () => {
-                axios
-                    .post(
-                        `http://127.0.0.1:3000/saveNote/?rnd=${new Date().getTime()}`,
-                        {
+                fetch(
+                    `http://127.0.0.1:3000/saveNote/?rnd=${new Date().getTime()}`,
+                    {
+                        method: 'POST',
+                        mode: 'cors',
+                        cache: 'no-cache',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
                             note: document.getElementsByTagName('textarea')[0]
                                 .value,
                             user: Cookies.get('user')
-                        }
-                    )
-                    .then(() => {
-                        console.log('Saved!');
-                        alert('Success');
-                        location.href = '/result';
-                    });
+                        })
+                    }
+                ).then(() => {
+                    console.log('Saved!');
+                    alert('Success');
+                    location.href = '/result';
+                });
             };
             document.getElementsByTagName('button')[0].onclick = () => {
                 saveNotes();
