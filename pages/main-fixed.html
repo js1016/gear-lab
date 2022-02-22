@@ -15,7 +15,7 @@
         </div>
         <script src="js.cookie.min.js"></script>
         <script>
-            let saveNotes = () => {
+            let saveNote = () => {
                 fetch(
                     `http://127.0.0.1:3000/saveNote/?rnd=${new Date().getTime()}`,
                     {
@@ -38,7 +38,7 @@
                 });
             };
             document.getElementsByTagName('button')[0].onclick = () => {
-                saveNotes();
+                saveNote();
             };
         </script>
     </body>
